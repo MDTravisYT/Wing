@@ -199,7 +199,7 @@ Level_NoFade:
 		subq.b	#1,rRLossAniT.w
 
 		moveq	#0,d0
-		move.b	rRLossAniF.w,d0		; Get ring frame
+		move.b	rRLossAniF.w,d0			; Get ring frame
 		lsl.w	#7,d0				; Convert to offset
 		move.l	#ArtUnc_Ring,d1			; Source address
 		add.l	d0,d1				; ''
@@ -223,13 +223,26 @@ Level_NoFade:
 ; Music IDs
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 Level_MusicIDs:
-		dc.b	mWWZ, mWWZ
+		dc.b	mWWZ				; Stage 0
+		dc.b	mWWZ				; Stage 1
+		dc.b	mWWZ				; Stage 2
+		dc.b	mWWZ				; Stage 3
+		dc.b	mWWZ				; Stage 4
+		dc.b	mWWZ				; Stage 5
+		dc.b	mWWZ				; Stage 6
+		dc.b	mWWZ				; Stage 7
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 ; Level water heights (-1 for no water)
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 Level_WaterLevels:
-		;dc.w	$490, -1			; Wacky Workbench
-		dc.w	-1, -1
+		dc.w	-1, -1				; Stage 0
+		dc.w	-1, -1				; Stage 1
+		dc.w	-1, -1				; Stage 2
+		dc.w	-1, -1				; Stage 3
+		dc.w	-1, -1				; Stage 4
+		dc.w	-1, -1				; Stage 5
+		dc.w	-1, -1				; Stage 6
+		dc.w	-1, -1				; Stage 7
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 ; Level data pointers
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -238,24 +251,84 @@ Level_WaterLevels:
 ;	dc.l	LAYOUT, OBJECTS, RINGS, COLLISION
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 Level_DataPointers:
+		; Stage 0
+		dc.l	TestStage_Chunks, TestStage_Blocks,  TestStage_Tiles, TestStage_Pal
+		dc.l	TestStage_Layout, TestStage_Objects, TestStage_Rings, TestStage_Collision
+
+		; Stage 1
 		dc.l	WWZ_Chunks, WWZ_Blocks,  WWZ_Tiles, WWZ_Pal
 		dc.l	WWZ_Layout, WWZ_Objects, WWZ_Rings, WWZ_Collision
+
+		; Stage 2
+		dc.l	WWZ_Chunks, WWZ_Blocks,  WWZ_Tiles, WWZ_Pal
+		dc.l	WWZ_Layout, WWZ_Objects, WWZ_Rings, WWZ_Collision
+
+		; Stage 3
+		dc.l	WWZ_Chunks, WWZ_Blocks,  WWZ_Tiles, WWZ_Pal
+		dc.l	WWZ_Layout, WWZ_Objects, WWZ_Rings, WWZ_Collision
+
+		; Stage 4
+		dc.l	WWZ_Chunks, WWZ_Blocks,  WWZ_Tiles, WWZ_Pal
+		dc.l	WWZ_Layout, WWZ_Objects, WWZ_Rings, WWZ_Collision
+
+		; Stage 5
+		dc.l	WWZ_Chunks, WWZ_Blocks,  WWZ_Tiles, WWZ_Pal
+		dc.l	WWZ_Layout, WWZ_Objects, WWZ_Rings, WWZ_Collision
+
+		; Stage 6
+		dc.l	WWZ_Chunks, WWZ_Blocks,  WWZ_Tiles, WWZ_Pal
+		dc.l	WWZ_Layout, WWZ_Objects, WWZ_Rings, WWZ_Collision
+
+		; Stage 7
 		dc.l	WWZ_Chunks, WWZ_Blocks,  WWZ_Tiles, WWZ_Pal
 		dc.l	WWZ_Layout, WWZ_Objects, WWZ_Rings, WWZ_Collision
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 ; Size and start position data
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 Level_SizeStartPos:
+		; Stage 0
 		dc.w	$3000, $580
-		incbin	"Level/Level Data/Wacky Workbench/Start Position.bin"
+		incbin	"Level/Level Data/Test Stage/Start Position.bin"
+
+		; Stage 1
 		dc.w	$3000, $580
-		incbin	"Level/Level Data/Wacky Workbench/Start Position.bin"
+		incbin	"Level/Level Data/Test Stage/Start Position.bin"
+
+		; Stage 2
+		dc.w	$3000, $580
+		incbin	"Level/Level Data/Test Stage/Start Position.bin"
+
+		; Stage 3
+		dc.w	$3000, $580
+		incbin	"Level/Level Data/Test Stage/Start Position.bin"
+
+		; Stage 4
+		dc.w	$3000, $580
+		incbin	"Level/Level Data/Test Stage/Start Position.bin"
+
+		; Stage 5
+		dc.w	$3000, $580
+		incbin	"Level/Level Data/Test Stage/Start Position.bin"
+
+		; Stage 6
+		dc.w	$3000, $580
+		incbin	"Level/Level Data/Test Stage/Start Position.bin"
+
+		; Stage 7
+		dc.w	$3000, $580
+		incbin	"Level/Level Data/Test Stage/Start Position.bin"
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 ; Dynamic events routines
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 Level_DynEvenRouts:
-		dc.l	DynEv_WWZ			; Wacky Workbench
-		dc.l	DynEv_WWZ
+		dc.l	DynEv_TestStage			; Stage 0
+		dc.l	DynEv_TestStage			; Stage 1
+		dc.l	DynEv_TestStage			; Stage 2
+		dc.l	DynEv_TestStage			; Stage 3
+		dc.l	DynEv_TestStage			; Stage 4
+		dc.l	DynEv_TestStage			; Stage 5
+		dc.l	DynEv_TestStage			; Stage 6
+		dc.l	DynEv_TestStage			; Stage 7
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 ; Wacky Workbench dynamic events routine
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -281,11 +354,31 @@ DynEv_WWZ:
 .Done:
 		rts
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
+; Test Stage dynamic events routine
+; ---------------------------------------------------------------------------------------------------------------------------------------------------------
+DynEv_TestStage:
+		moveq	#0,d0
+		move.b	rDynEvRout.w,d0
+		move.w	.Index(pc,d0.w),d0
+		jmp	.Index(pc,d0.w)
+; ---------------------------------------------------------------------------------------------------------------------------------------------------------
+.Index:
+		dc.w	.Null-.Index
+; ---------------------------------------------------------------------------------------------------------------------------------------------------------
+.Null:
+		rts
+; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 ; Palette cycle routines
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 Level_PalCycRouts:
-		dc.l	PalCycle_WWZ			; Wacky Workbench
-		dc.l	PalCycle_WWZ
+		dc.l	PalCycle_TestStage		; Stage 0
+		dc.l	PalCycle_WWZ			; Stage 1
+		dc.l	PalCycle_WWZ			; Stage 2
+		dc.l	PalCycle_WWZ			; Stage 3
+		dc.l	PalCycle_WWZ			; Stage 4
+		dc.l	PalCycle_WWZ			; Stage 5
+		dc.l	PalCycle_WWZ			; Stage 6
+		dc.l	PalCycle_WWZ			; Stage 7
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 ; Wacky Workbench palette cycle routine
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -335,11 +428,22 @@ PalCyc_WWZFloor:
 PalCyc_WWZFloorUW:
 		dc.w	$E48, $220, $2EE, $220, $EEE
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
+; Test Stage palette cycle routine
+; ---------------------------------------------------------------------------------------------------------------------------------------------------------
+PalCycle_TestStage:
+		rts
+; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 ; Animated art routines
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 Level_AniArtRouts:
-		dc.l	AniArt_WWZ			; Wacky Workbench
-		dc.l	AniArt_WWZ
+		dc.l	AniArt_WWZ			; Stage 0
+		dc.l	AniArt_WWZ			; Stage 1
+		dc.l	AniArt_WWZ			; Stage 2
+		dc.l	AniArt_WWZ			; Stage 3
+		dc.l	AniArt_WWZ			; Stage 4
+		dc.l	AniArt_WWZ			; Stage 5
+		dc.l	AniArt_WWZ			; Stage 6
+		dc.l	AniArt_WWZ			; Stage 7
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 ; Wacky Workbench animated art routine
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -370,14 +474,53 @@ AniArt_WWZ:
 ;	Nothing
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 Level_RenderRouts:
-		dc.l	General_InitFG			; Wacky Workbench
-		dc.l	WWZ_InitBG
-		dc.l	General_UpdateFG
-		dc.l	WWZ_UpdateBG
+		; Stage 0
 		dc.l	General_InitFG
-		dc.l	WWZ_InitBG
+		dc.l	TestStage_InitBG
 		dc.l	General_UpdateFG
-		dc.l	WWZ_UpdateBG
+		dc.l	TestStage_UpdateBG
+
+		; Stage 1
+		dc.l	General_InitFG
+		dc.l	General_InitBG
+		dc.l	General_UpdateFG
+		dc.l	General_UpdateBG
+
+		; Stage 2
+		dc.l	General_InitFG
+		dc.l	General_InitBG
+		dc.l	General_UpdateFG
+		dc.l	General_UpdateBG
+
+		; Stage 3
+		dc.l	General_InitFG
+		dc.l	General_InitBG
+		dc.l	General_UpdateFG
+		dc.l	General_UpdateBG
+
+		; Stage 4
+		dc.l	General_InitFG
+		dc.l	General_InitBG
+		dc.l	General_UpdateFG
+		dc.l	General_UpdateBG
+
+		; Stage 5
+		dc.l	General_InitFG
+		dc.l	General_InitBG
+		dc.l	General_UpdateFG
+		dc.l	General_UpdateBG
+
+		; Stage 6
+		dc.l	General_InitFG
+		dc.l	General_InitBG
+		dc.l	General_UpdateFG
+		dc.l	General_UpdateBG
+
+		; Stage 7
+		dc.l	General_InitFG
+		dc.l	General_InitBG
+		dc.l	General_UpdateFG
+		dc.l	General_UpdateBG
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 ; Wacky Workbench background initialization
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -427,6 +570,53 @@ WWZ_UpdateBG:
 		; FRONT WALL
 		scrollSection	368, $80
 
+		scrollEnd
+; ---------------------------------------------------------------------------------------------------------------------------------------------------------
+; Test Stage background initialization
+; ---------------------------------------------------------------------------------------------------------------------------------------------------------
+TestStage_InitBG:
+		lea	rFGCam.w,a2			; Get foreground level drawing RAM
+		move.w	cYPos(a2),d0			; Get foreground Y position
+		asr.w	#6,d0				; Divide by 2
+		move.w	d0,cYPos(a1)			; Set as background Y position
+
+		bsr.w	Level_RefreshPlane		; Refresh the plane
+
+		lea	TestStage_Scroll(pc),a3		; Get background scroll data
+		bra.w	ScrollSections			; Scroll the planes
+; ---------------------------------------------------------------------------------------------------------------------------------------------------------
+; Test Stage background update
+; ---------------------------------------------------------------------------------------------------------------------------------------------------------
+TestStage_UpdateBG:
+		lea	rFGCam.w,a2			; Get foreground level drawing RAM
+	;	move.w	cYPos(a2),d0			; Get foreground Y position
+	;	asr.w	#6,d0				; Divide by 2
+	;	move.w	d0,cYPos(a1)			; Set as background Y position
+
+		bsr.w	Level_ChkRedrawPlane		; Check if the plane needs to be redrawn
+		moveq	#(240/16)-1,d4			; Number of blocks per column
+		moveq	#(336/16)-1,d5			; Number of blocks per row
+		bsr.w	Level_UpdatePlane		; Update the plane
+
+		lea	TestStage_Scroll(pc),a3		; Get background scroll data
+		bra.w	ScrollSections			; Scroll the planes
+; --------------------------------------------------------------------------------------------------------------------------------------
+		scrollInit	TestStage_Scroll
+
+		; Clouds 1
+		scrollSection	40,	$0000|60
+
+		; Clouds 2
+		scrollSection	24,	$0000|36
+
+		; Clouds 3
+		scrollSection	16,	$0000|24
+
+		; Clouds 4
+		scrollSection	8,	$0000|12
+
+		; Remaining background (256 - above sections)
+		scrollSection	168,	$0000|6
 		scrollEnd
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 ; Wacky Workbench level data
@@ -479,6 +669,47 @@ ArtUnc_Sirens:
 		incbin	"Level/Level Data/Wacky Workbench/Sirens.bin"
 		even
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
+; Wacky Workbench level data
+; ---------------------------------------------------------------------------------------------------------------------------------------------------------
+TestStage_Layout:
+		incbin	"Level/Level Data/Test Stage/Layout.bin"
+		even
+TestStage_Chunks:
+		incbin	"Level/Level Data/Test Stage/Chunks.bin"
+		even
+TestStage_Blocks:
+		incbin	"Level/Level Data/Test Stage/Blocks.bin"
+		even
+TestStage_Tiles:
+		incbin	"Level/Level Data/Test Stage/Tiles.kosm.bin"
+		even
+		dc.w	$FFFF, 0, 0
+TestStage_Objects:
+		incbin	"Level/Level Data/Test Stage/Objects.bin"
+		even
+TestStage_Rings:
+		incbin	"Level/Level Data/Test Stage/Rings.bin"
+		even
+TestStage_Pal:
+		dc.w	$100>>1-1
+		incbin	"Level/Level Data/Test Stage/Palette.pal.bin"
+		incbin	"Level/Level Data/Test Stage/Palette (Water).pal.bin"
+		even
+TestStage_Collision:
+		dc.l	.ColData, .Angles, .Heights, .HeightsR
+.ColData:
+		incbin	"Level/Level Data/Test Stage/Collision.bin"
+		even
+.Angles:
+		incbin	"Level/Level Data/Test Stage/Angle Values.bin"
+		even
+.Heights:
+		incbin	"Level/Level Data/Test Stage/Height Values.bin"
+		even
+.HeightsR:
+		incbin	"Level/Level Data/Test Stage/Height Values (Rotated).bin"
+		even
+; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 ; Main level PLCs
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 PLC_LevelMain:
@@ -509,8 +740,14 @@ PLC_LevelMain:
 ; Level PLCs
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 Level_PLCs:
-		dc.l	PLC_WWZ
-		dc.l	PLC_WWZ
+		dc.l	PLC_WWZ				; Stage 0
+		dc.l	PLC_WWZ				; Stage 1
+		dc.l	PLC_WWZ				; Stage 2
+		dc.l	PLC_WWZ				; Stage 3
+		dc.l	PLC_WWZ				; Stage 4
+		dc.l	PLC_WWZ				; Stage 5
+		dc.l	PLC_WWZ				; Stage 6
+		dc.l	PLC_WWZ				; Stage 7
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 ; Wacky Workbench PLCs
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
