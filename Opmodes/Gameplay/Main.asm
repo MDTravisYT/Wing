@@ -107,7 +107,7 @@ Level_NoFade:
 		jsr	InitOscillation.w		; Initialize oscillation
 
 		bsr.w	Level_HandleCamera		; Initialize the camera
-		bsr.w	Level_InitHUD			; Initialize the HUD
+	;	bsr.w	Level_InitHUD			; Initialize the HUD
 		bsr.w	Level_WaterHeight		; Initialize water height
 
 		bsr.w	Level_AnimateArt		; Animate level art
@@ -287,6 +287,8 @@ Level_DynEvenRouts:
 ; Wacky Workbench dynamic events routine
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 DynEv_WWZ:
+		move.w	#0,	maxCamXPos
+		move.w	#0,	maxCamYPos
 		moveq	#0,d0
 		move.b	dynEventRout.w,d0
 		move.w	.Index(pc,d0.w),d0
@@ -297,13 +299,7 @@ DynEv_WWZ:
 		dc.w	.Done-.Index
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 .WaitBoss:
-		cmpi.w	#$2EE0,fgCamXPos.w
-		blt.s	.Done
-		move.w	#$340,minCamYPos.w
-		move.w	#$340,targetMaxCamY.w
-		move.w	#$2EE0,minCamXPos.w
-		move.w	#$2EE0,maxCamXPos.w
-		addq.b	#2,dynEventRout.w
+
 
 .Done:
 		rts

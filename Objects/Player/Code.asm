@@ -4,8 +4,8 @@
 TOP_SPD		EQU	$600				; Top speed
 ACC_SPD		EQU	$C				; Acceleration
 DEC_SPD		EQU	$80				; Deceleration
-JUMP_HEIGHT	EQU	$680				; Jump height
-MIN_JMP_HEIGHT	EQU	$400				; Minimum jump height
+JUMP_HEIGHT	EQU	$180				; Jump height
+MIN_JMP_HEIGHT	EQU	$180				; Minimum jump height
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 		rsset	_objLvlSSTs
 _objInitColH	rs.b	1				; Initial collision height
@@ -52,8 +52,8 @@ ObjPlayer:
 ObjPlayer_Init:
 		addq.b	#4,_objRoutine(a0)			; Next routine
 
-		move.b	#9,_objColW(a0)			; Collision width
-		move.b	#$13,_objColH(a0)			; Collision height
+		move.b	#7,_objColW(a0)			; Collision width
+		move.b	#$8,_objColH(a0)			; Collision height
 		move.b	_objColW(a0),_objInitColW(a0)		; Set initial collision width
 		move.b	_objColH(a0),_objInitColH(a0)		; Set initial collision height
 		move.l	#Map_ObjPlayer,_objMapping(a0)		; Mappings
@@ -240,10 +240,10 @@ ObjPlayer_Modes:
 ; Ground mode
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 ObjPlayer_MdGround:
-		bsr.w	ObjPlayer_Peelout		; Handle the peelout
-		bsr.w	ObjPlayer_Spindash		; Handle the spindash
+;		bsr.w	ObjPlayer_Peelout		; Handle the peelout
+;		bsr.w	ObjPlayer_Spindash		; Handle the spindash
 		bsr.w	ObjPlayer_ChkJump		; Check for jumping
-		bsr.w	ObjPlayer_ChkRoll		; Check for rolling
+;		bsr.w	ObjPlayer_ChkRoll		; Check for rolling
 		bsr.w	ObjPlayer_MoveGround		; Do movement on the ground
 		jsr	ObjectMove.w			; Allow movement
 		jsr	PlayerAnglePos			; Update position and angle along the ground
@@ -280,6 +280,8 @@ ObjPlayer_MiscUpdates:
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 ObjPlayer_MdJump:
 ObjPlayer_MdAir:
+		bsr.w	ObjPlayer_ChkJump		; Check for jumping
+
 		clr.w	_objInteract(a0)			; Sonic cannot be interacting with objects while in midair
 		bclr	#cStandBit,_objStatus(a0)		; ''
 
@@ -311,8 +313,6 @@ ObjPlayer_MdAir:
 ; Roll mode
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 ObjPlayer_MdRoll:
-		tst.b	_objBallMode(a0)			; Are we in ball mode?
-		bne.s	.NoJump				; If so, branch
 		bsr.w	ObjPlayer_ChkJump		; Check for jumping
 
 .NoJump:
@@ -677,7 +677,7 @@ ObjPlayer_MoveRoll:
 		move.b	_objInitColH(a0),_objColH(a0)		; Reset collision height
 		move.b	_objInitColW(a0),_objColW(a0)		; Reset collision width
 		move.b	#5,_objAnim(a0)			; Use standing animation
-		subq.w	#5,_objYPos(a0)			; Align Sonic with the ground
+	;	subq.w	#5,_objYPos(a0)			; Align Sonic with the ground
 		bra.s	.UpdateSpd			; Continue
 
 .KeepRoll:
@@ -978,9 +978,9 @@ ObjPlayer_Spindash:
 		neg.w	_objGVel(a0)			; Go the other way
 
 .SetAni:
-		move.b	#$E,_objColH(a0)			; Reduce Sonic's hitbox
+		move.b	#$8,_objColH(a0)			; Reduce Sonic's hitbox
 		move.b	#7,_objColW(a0)			; ''
-		addq.w	#5,_objYPos(a0)			; Align Sonic to the ground
+	;	addq.w	#5,_objYPos(a0)			; Align Sonic to the ground
 		move.b	#2,_objAnim(a0)			; Set to spin animation
 
 		playSnd	#sCharge, 2			; Play charge sound
@@ -1027,7 +1027,7 @@ ObjPlayer_Spindash:
 		clr.w	_objGVel(a0)			; Stop ground movement
 		move.b	_objInitColH(a0),_objColH(a0)		; Reset collision height
 		move.b	_objInitColW(a0),_objColW(a0)		; Reset collision width
-		subq.w	#5,_objYPos(a0)			; Align Sonic with the ground
+	;	subq.w	#5,_objYPos(a0)			; Align Sonic with the ground
 
 		playSnd	#sChargeStop, 2			; Play charge stop sound
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -1088,9 +1088,9 @@ ObjPlayer_ChkJump:
 		addq.w	#4,sp				; Do not return to collaer
 		st	_objJumping(a0)			; Set the jumping flag
 		playSnd	#sLeap, 2			; Play jump sound
-		move.b	#$E,_objColH(a0)			; Reduce Sonic's hitbox
+		move.b	#$8,_objColH(a0)			; Reduce Sonic's hitbox
 		move.b	#7,_objColW(a0)			; ''
-		addq.w	#5,_objYPos(a0)			; Align Sonic to the ground
+	;	addq.w	#5,_objYPos(a0)			; Align Sonic to the ground
 		move.b	#2,_objAnim(a0)			; Set jumping animation
 
 .End:
@@ -1099,8 +1099,8 @@ ObjPlayer_ChkJump:
 ; Handle variable jumping
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 ObjPlayer_JumpHeight:
-		tst.b	_objJumping(a0)			; Is Sonic jumping?
-		beq.s	.UpVelCap			; If not, branch
+	;	tst.b	_objJumping(a0)			; Is Sonic jumping?
+	;	beq.s	.UpVelCap			; If not, branch
 
 		move.w	#-MIN_JMP_HEIGHT,d1		; Standard minimum height
 		cmp.w	_objYVel(a0),d1			; Is Sonic jumping at least hte minimum height?
@@ -1209,9 +1209,9 @@ ObjPlayer_DoRoll:
 		bne.s	.End				; If so, branch
 		bset	#2,_objStatus(a0)			; Set roll flag
 
-		move.b	#$E,_objColH(a0)			; Reduce Sonic's hitbox
+		move.b	#$8,_objColH(a0)			; Reduce Sonic's hitbox
 		move.b	#7,_objColW(a0)			; ''
-		addq.w	#5,_objYPos(a0)			; Align Sonic to the ground
+	;	addq.w	#5,_objYPos(a0)			; Align Sonic to the ground
 		move.b	#2,_objAnim(a0)			; Set rolling animation
 
 		tst.w	_objGVel(a0)			; Is Sonic moving already?
@@ -1352,9 +1352,9 @@ ObjPlayer_ChkBounce:
 		btst	#2,_objStatus(a0)			; Is Sonic already rolling?
 		bne.s	.End				; If so, branch
 		bset	#2,_objStatus(a0)			; Set roll flag
-		move.b	#$E,_objColH(a0)			; Reduce Sonic's hitbox
+		move.b	#$8,_objColH(a0)			; Reduce Sonic's hitbox
 		move.b	#7,_objColW(a0)			; ''
-		addq.w	#5,_objYPos(a0)			; Align Sonic to the ground
+	;	addq.w	#5,_objYPos(a0)			; Align Sonic to the ground
 		move.b	#2,_objAnim(a0)			; Set rolling animation
 
 .End:
@@ -1405,9 +1405,9 @@ ObjPlayer_ChkBounce:
 		btst	#2,_objStatus(a0)			; Is Sonic already rolling?
 		bne.s	.End2				; If so, branch
 		bset	#2,_objStatus(a0)			; Set roll flag
-		move.b	#$E,_objColH(a0)			; Reduce Sonic's hitbox
+		move.b	#$8,_objColH(a0)			; Reduce Sonic's hitbox
 		move.b	#7,_objColW(a0)			; ''
-		addq.w	#5,_objYPos(a0)			; Align Sonic to the ground
+	;	addq.w	#5,_objYPos(a0)			; Align Sonic to the ground
 		move.b	#2,_objAnim(a0)			; Set rolling animation
 
 .End2:
@@ -1434,7 +1434,7 @@ ObjPlayer_ChkHang:
 		bset	#3,_objFlags(a0)			; Set hanging flag
 		move.b	#$A,_objAnim(a0)			; Set hanging animation
 		move.b	#7,_objHangAniTime(a0)		; Animation timer
-		move.w	_objYPos(a0),d0			; Align with bar
+	;	move.w	_objYPos(a0),d0			; Align with bar
 		subi.w	#$18,d0				; ''
 		andi.w	#$FFF0,d0			; ''
 		addi.w	#$18,d0				; ''

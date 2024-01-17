@@ -143,8 +143,8 @@ RendeobjMemory:
 		lea	spriteBuff.w,a6			; Sprite table buffer
 
 		cmpi.b	#gLevel,opmode.w		; Are we in level mode?
-		bne.s	.PrioLvlLoop			; If not, branch
-		jsr	Level_RenderHUDAndRings		; Render the HUD & Rings (in that order)
+;		bne.s	.PrioLvlLoop			; If not, branch
+;		jsr	Level_RenderHUDAndRings		; Render the HUD & Rings (in that order)
 
 .PrioLvlLoop:
 		move.w	(a5),a0				; Load priority level address to a0
@@ -488,7 +488,7 @@ ObjectMoveAndFall:
 		lsl.l	#8,d0				; Shift
 		add.l	d0,_objXPos(a0)			; Add to the X position
 		move.w	_objYVel(a0),d0			; Get Y velocity
-		addi.w	#$38,_objYVel(a0)			; Apply gravity
+		addi.w	#$0C,_objYVel(a0)			; Apply gravity
 		ext.l	d0				; ''
 		lsl.l	#8,d0				; Shift
 		add.l	d0,_objYPos(a0)			; Add to the Y position

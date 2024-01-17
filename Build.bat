@@ -3,14 +3,14 @@
 set ROM=ROM
 set /a "PAD=1"
 
-IF EXIST %ROM%.mdrv move /Y %ROM%.mdrv %ROM%_prev.mdrv >NUL
-Utilities\Assembler\asm68k.exe /m /p Main.asm, %ROM%.mdrv, , _LISTINGS.lst>_ERROR.log
+IF EXIST %ROM%.bin move /Y %ROM%.bin %ROM%_prev.bin >NUL
+Utilities\Assembler\asm68k.exe /m /p Main.asm, %ROM%.bin, , _LISTINGS.lst>_ERROR.log
 type _ERROR.log
-if not exist %ROM%.mdrv pause & exit
+if not exist %ROM%.bin pause & exit
 echo.
-if "%PAD%"=="1" Utilities\rompad.exe %ROM%.mdrv 255 0
-Utilities\fixheadr.exe %ROM%.mdrv
-"Config/Error/ConvSym.exe" _SYMBOLS.sym %ROM%.mdrv -input asm68k_sym -a
+if "%PAD%"=="1" Utilities\rompad.exe %ROM%.bin 255 0
+Utilities\fixheadr.exe %ROM%.bin
+"Config/Error/ConvSym.exe" _SYMBOLS.sym %ROM%.bin -input asm68k_sym -a
 del _ERROR.log
 del _SYMBOLS.sym
 echo.

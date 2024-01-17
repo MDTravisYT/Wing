@@ -210,6 +210,7 @@ PlayerHitRWall:
 ; Reset a player object's status on the floor
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 PlayerResetOnFloor:
+		playSnd	#sSkid, 2			; Play skid sound
 		tst.b	_objBallMode(a0)			; Are we in ball mode?
 		bne.s	PlayerResetOnFloorPart3	; If so, branch
 		clr.b	_objAnim(a0)			; Set walking animation
@@ -221,7 +222,7 @@ PlayerResetOnFloorPart2:
 		move.b	_objInitColW(a0),_objColW(a0)		; Reset collision width
 		move.b	_objInitColH(a0),_objColH(a0)		; Reset collision height
 		clr.b	_objAnim(a0)			; Set walking animation
-		subq.w	#5,_objYPos(a0)			; Align with floor
+	;	subq.w	#5,_objYPos(a0)			; Align with floor
 
 PlayerResetOnFloorPart3:
 		andi.b	#$DD,_objStatus(a0)		; Clear "pushing", and "jumping" flag
