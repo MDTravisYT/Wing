@@ -621,7 +621,7 @@ ObjPlayer_MoveRight:
 		bgt.s	.End				; If not, branch
 		move.b	#$D,_objAnim(a0)			; Set animation to skidding
 		bset	#0,_objStatus(a0)			; Set flip flag
-		playSnd	#sSkid, 2			; Play skid sound
+
 		rts
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 ; Do movement while rolling
