@@ -6,13 +6,13 @@ SndJump_Header:
 
 SndJump_FM5:
 	dc.b	$F3,	$E7
-	ssMod68k	$00, $01, -4, $10
+	ssMod68k	$00, $01, -5, $10
 	dc.b nC3, $10
 	sModOff
 	
 Jumploop:
-	dc.b	nC3,	$01
-	dc.b	$E4,	-1
+	dc.b	$E7,	$02
+	saVol	$01
 	sLoop		$00, $0B, Jumploop
 	
 	sStop	
