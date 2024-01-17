@@ -1,6 +1,6 @@
 @echo off
 
-set ROM=ROM
+set ROM=Wing
 set /a "PAD=1"
 
 IF EXIST %ROM%.bin move /Y %ROM%.bin %ROM%_prev.bin >NUL
