@@ -1,7 +1,7 @@
 ; =========================================================================================================================================================
 ; Sonic object
 ; =========================================================================================================================================================
-TOP_SPD		EQU	$600				; Top speed
+TOP_SPD		EQU	$300				; Top speed
 ACC_SPD		EQU	$C				; Acceleration
 DEC_SPD		EQU	$80				; Deceleration
 JUMP_HEIGHT	EQU	$180				; Jump height
@@ -1051,7 +1051,7 @@ ObjPlayer_Spindash:
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 ObjPlayer_ChkJump:
 		move.b	plrCtrlPress.w,d0		; Get pressed buttons
-		andi.b	#$70,d0				; Are A, B, or C pressed?
+		andi.b	#$20,d0				; Are A, B, or C pressed?
 		tst.b	moveCheat.w
 		beq.s	.NoDebug
 		andi.b	#$60,d0				; Are A or C pressed?
@@ -1106,7 +1106,7 @@ ObjPlayer_JumpHeight:
 		cmp.w	_objYVel(a0),d1			; Is Sonic jumping at least hte minimum height?
 		ble.s	.End				; If not, branch
 		move.b	plrCtrlHold.w,d0		; Get held buttons
-		andi.b	#$70,d0				; Are A, B, or C pressed?
+		andi.b	#$20,d0				; Are A, B, or C pressed?
 		tst.b	moveCheat.w
 		beq.s	.NoDebug
 		andi.b	#$60,d0				; Are A or C pressed?
