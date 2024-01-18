@@ -107,7 +107,7 @@ Level_NoFade:
 		jsr	InitOscillation.w		; Initialize oscillation
 
 		bsr.w	Level_HandleCamera		; Initialize the camera
-		bsr.w	Level_InitHUD			; Initialize the HUD
+	;	bsr.w	Level_InitHUD			; Initialize the HUD
 		bsr.w	Level_WaterHeight		; Initialize water height
 
 		bsr.w	Level_AnimateArt		; Animate level art

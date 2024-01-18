@@ -1062,6 +1062,11 @@ ObjPlayer_ChkAttack:
 		jsr	FindFreeObj.w
 		beq.s	.End
 		move.l	#ObjAttack,_objAddress(a1)
+		move.b	#30,_objDrawW(a1)
+		btst	#0,_objStatus(a0)			; Is Sonic facing left?
+		beq.s	.cont			; If so, branch
+		move.w	#1,	_objSubtype(a1)
+	.cont:
 		move.w	_objXPos(a0),_objXPos(a1)
 		move.w	_objYPos(a0),_objYPos(a1)
 		

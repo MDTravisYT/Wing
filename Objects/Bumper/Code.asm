@@ -9,22 +9,29 @@ ObjAttack:
 		move.l	#Map_ObjBumper,_objMapping(a0)		; Mappings
 		move.w	#$35B,_objVRAM(a0)			; Tile properties
 		move.b	#4,_objRender(a0)			; Render flags
-	displaySprite	1,a0,a1,0			; Priority
+		displaySprite	1,a0,a1,0			; Priority
 		moveq	#$10,d1
-		move.b	d1,_objDrawW(a0)
-		move.b	d1,_objColW(a0)
-		move.b	d1,_objDrawH(a0)
-		move.b	d1,_objColH(a0)
+	;	move.b	d1,_objDrawW(a0)
+	;	move.b	d1,_objColW(a0)
+	;	move.b	d1,_objDrawH(a0)
+	;	move.b	d1,_objColH(a0)
 		
 
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 ObjBumperMain:
-	add.w	#10,_objXPos(a0)
-
-		move.w	maxCamXPos.w,d0		; Get max camera Y position
-		addi.w	#320,d0				; Get bottom boundary position
-		cmp.w	_objXPos(a0),d0			; Have we touched the bottom boundary?
-		blt.s	ObjAttack_Delete		; If so, branch
+		cmpi.w	#0,	_objSubtype(a0)
+		beq.s	.AttackX
+		
+		add.w	#-10,_objXPos(a0)
+		bra.s	.cont
+		
+	.AttackX:
+		add.w	#10,_objXPos(a0)
+	.cont:
+		subq.b	#1,	_objDrawW(a0)
+		tst.b	_objDrawW(a0)
+		beq.w	ObjAttack_Delete
+		
 	nextObject
 
 ObjAttack_Delete:
