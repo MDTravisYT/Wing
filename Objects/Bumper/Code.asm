@@ -15,11 +15,21 @@ ObjAttack:
 		move.b	d1,_objColW(a0)
 		move.b	d1,_objDrawH(a0)
 		move.b	d1,_objColH(a0)
+		
+
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 ObjBumperMain:
 	add.w	#10,_objXPos(a0)
 
+		move.w	maxCamXPos.w,d0		; Get max camera Y position
+		addi.w	#320,d0				; Get bottom boundary position
+		cmp.w	_objXPos(a0),d0			; Have we touched the bottom boundary?
+		blt.s	ObjAttack_Delete		; If so, branch
+	nextObject
 
+ObjAttack_Delete:
+		playSnd	#sCheckpoint, 2			; Play checkpoint sound
+		jsr	DeleteObject.w
 	nextObject
 
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
