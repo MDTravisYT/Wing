@@ -35,7 +35,7 @@ ObjBumperMain:
 	nextObject
 
 ObjAttack_Delete:
-		playSnd	#sCheckpoint, 2			; Play checkpoint sound
+	;	playSnd	#sCheckpoint, 2			; Play checkpoint sound
 		jsr	DeleteObject.w
 	nextObject
 

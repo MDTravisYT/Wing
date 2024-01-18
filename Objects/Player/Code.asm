@@ -1069,6 +1069,7 @@ ObjPlayer_ChkAttack:
 	.cont:
 		move.w	_objXPos(a0),_objXPos(a1)
 		move.w	_objYPos(a0),_objYPos(a1)
+		playSnd	#sCheckpoint, 2			; Play checkpoint sound
 		
 .End:
 		rts
