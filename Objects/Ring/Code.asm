@@ -7,7 +7,7 @@
 ObjRingLoss:
 		movea.l	a0,a1
 		moveq	#0,d5
-		move.w	ringCount.w,d5
+		move.w	#1,d5
 		moveq	#32,d0
 		cmp.w	d0,d5
 		bcs.s	.BelowMax

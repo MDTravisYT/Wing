@@ -522,7 +522,7 @@ Level_ObjIndex:
 		dc.l	ObjWallSpring
 		dc.l	ObjNull			;ObjHarpoon
 		dc.l	ObjBallMode
-		dc.l	ObjBumper
+		dc.l	ObjAttack
 		dc.l	ObjNull			;ObjCNZBarrel
 		dc.l	ObjNull			;ObjDiamond
 		dc.l	ObjNull			;ObjOrbinaut

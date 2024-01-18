@@ -243,6 +243,7 @@ ObjPlayer_MdGround:
 ;		bsr.w	ObjPlayer_Peelout		; Handle the peelout
 ;		bsr.w	ObjPlayer_Spindash		; Handle the spindash
 		bsr.w	ObjPlayer_ChkJump		; Check for jumping
+		bsr.w	ObjPlayer_ChkAttack		; Check for attack
 ;		bsr.w	ObjPlayer_ChkRoll		; Check for rolling
 		bsr.w	ObjPlayer_MoveGround		; Do movement on the ground
 		jsr	ObjectMove.w			; Allow movement
@@ -281,6 +282,7 @@ ObjPlayer_MiscUpdates:
 ObjPlayer_MdJump:
 ObjPlayer_MdAir:
 		bsr.w	ObjPlayer_ChkJump		; Check for jumping
+		bsr.w	ObjPlayer_ChkAttack		; Check for attack
 
 		clr.w	_objInteract(a0)			; Sonic cannot be interacting with objects while in midair
 		bclr	#cStandBit,_objStatus(a0)		; ''
@@ -314,6 +316,7 @@ ObjPlayer_MdAir:
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 ObjPlayer_MdRoll:
 		bsr.w	ObjPlayer_ChkJump		; Check for jumping
+		bsr.w	ObjPlayer_ChkAttack		; Check for attack
 
 .NoJump:
 		bsr.w	ObjPlayer_RollSlopePush		; Push Sonic on a slope while rolling
@@ -1046,12 +1049,31 @@ ObjPlayer_Spindash:
 
 .End:
 		rts
+		
+; ---------------------------------------------------------------------------------------------------------------------------------------------------------
+; Check for fire attack
+; ---------------------------------------------------------------------------------------------------------------------------------------------------------
+ObjPlayer_ChkAttack:
+		move.b	plrCtrlPress.w,d0		; Get pressed buttons
+		andi.b	#$10,d0				; Are B pressed?
+		tst.b	d0
+		beq.w	.End				; If not, branch
+		
+		jsr	FindFreeObj.w
+		beq.s	.End
+		move.l	#ObjAttack,_objAddress(a1)
+		move.w	_objXPos(a0),_objXPos(a1)
+		move.w	_objYPos(a0),_objYPos(a1)
+		
+.End:
+		rts
+		
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 ; Check for jumping
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 ObjPlayer_ChkJump:
 		move.b	plrCtrlPress.w,d0		; Get pressed buttons
-		andi.b	#$20,d0				; Are A, B, or C pressed?
+		andi.b	#$20,d0				; Are C pressed?
 		tst.b	moveCheat.w
 		beq.s	.NoDebug
 		andi.b	#$60,d0				; Are A or C pressed?
