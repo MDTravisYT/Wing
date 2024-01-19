@@ -1632,7 +1632,7 @@ PlayerDoObjCollision:
 .CollisionTypes:
 		bra.s	.Enemy				; Enemy
 		bra.s	.Indestructable			; Indestructable
-		bra.s	.Monitor			; Monitor
+
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 .Enemy:
 		cmpi.b	#2,_objAnim(a0)			; Are we rolling?
@@ -1672,31 +1672,8 @@ PlayerDoObjCollision:
 		subi.w	#$100,_objYVel(a0)			; Move up
 		rts
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
-.Indestructable:
-		bra.s	.ChkHurt			; Get hurt
-; ---------------------------------------------------------------------------------------------------------------------------------------------------------
-.Monitor:
-		move.w	_objYVel(a0),d0			; Get Y velocity
-		bpl.s	.ChkDestroy			; If it's falling or staying still, branch
-		move.w	_objYPos(a0),d0			; Get player's Y position
-		subi.w	#$10,d0				; Subtract 16
-		cmp.w	_objYPos(a1),d0			; Is the plyaer hitting the bottom of the object?
-		blo.s	.MonitorEnd			; If not, branch
-		move.w	#-$180,_objYVel(a1)		; Bounce the monitor up
-		tst.b	_objMonFall(a1)			; Is it already falling?
-		bne.s	.MonitorEnd			; If so, branch
-		st	_objMonFall(a1)			; Set the fall flag
-		rts
-
-.ChkDestroy:
-		cmpi.b	#2,_objAnim(a0)			; Are we rolling?
-		bne.s	.MonitorEnd			; If not, branch
-		neg.w	_objYVel(a0)			; Bounce up
-		move.l	#ObjMonitorBreakOpen,_objAddress(a1)	; Set to destroyed routine
-		
-.MonitorEnd:
-		rts
-; ---------------------------------------------------------------------------------------------------------------------------------------------------------
+.Indestructable: 
+;---------------------------------------------------------------------------------------------------------------------------------------------------------
 .ChkHurt:
 		tst.w	_objInvulTime(a0)			; Are we invulnerable?
 		bne.s	.NoHurt				; If so, branch

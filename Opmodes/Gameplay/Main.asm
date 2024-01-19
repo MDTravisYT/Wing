@@ -511,7 +511,7 @@ PLC_WWZ:
 ; Object index
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 Level_ObjIndex:
-		dc.l	ObjMonitor
+		dc.l	ObjEnemy
 		dc.l	ObjSpike
 		dc.l	ObjSpring
 		dc.l	ObjCheckpoint
