@@ -12,10 +12,16 @@ Attack_FM5:
 
 Attack_Loop1:
 	dc.b nC4, $03, nRst, $01
-	sLoop		$00, $03, Attack_Loop1
+	sLoop		$00, $01, Attack_Loop1
 
 Attack_Loop2:
 	dc.b nC4, $03, nRst, $01
 	saVol	$01
-	sLoop		$00, $09, Attack_Loop2
+	dc.b nB3, $03, nRst, $01
+	saVol	$01
+	dc.b nBb3, $03, nRst, $01
+	saVol	$01
+	dc.b nBb3-1, $03, nRst, $01
+	saVol	$01
+	sLoop		$00, $03, Attack_Loop2
 	sStop	
