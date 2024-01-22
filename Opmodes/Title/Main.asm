@@ -1,10 +1,36 @@
 ; =========================================================================================================================================================
 ; Title splash screen
 ; =========================================================================================================================================================
-
+locVRAM:	macro loc,controlport
+		move.l	#($40000000+(((loc)&$3FFF)<<16)+(((loc)&$C000)>>14)),(VDP_CTRL).l
+		endm
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
 TitleScreen:
-		bra.s	TitleScreen
+        playSnd #Mus_Stop,  1
+        bsr.w    FadeToBlack
+        lea     (VDP_CTRL).l,   a5
+        move.w  #$8004, (a5)
+        move.w  #$8230, (a5)
+        move.w  #$8407, (a5)
+        move.w  #$8700, (a5)
+        move.w  #$8B00, (a5)
+        move.w  (dmaQueue).w,   d0
+        andi.b  #$BF,   d0
+        move.w  d0, (VDP_CTRL).l
+
+        bsr.w   ClearScreen
+        locVRAM 0
+
+		lea	WWZ_Pal,a0			; Load palette to target buffer
+		move.w	#(WWZ_Pal_End-WWZ_Pal)>>1-1,d0
+		bsr.w	LoadTargetPal			; ''
+
+        bsr.w   FadeFromBlack
+     ;   RaiseError  "End of title successfully reached"
+    .loop:
+		move.b	#gLevel,opmode.w			; Set game mode to "title"
+		jmp	Level					; Go to the title screen
+		bra.s	.loop
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------	
 ;		playSnd	#Mus_Stop, 1			; Stop sound
 ;

@@ -47,8 +47,8 @@ GameInit:
 		clr.w	dmaQueue.w				; Set stop token at the beginning of the DMA queue
 		move.w	#dmaQueue,dmaSlot.w			; Reset the DMA queue slot
 
-		move.b	#gLevel,opmode.w			; Set game mode to "title"
-		jmp	Level					; Go to the title screen
+		move.b	#gTitle,opmode.w			; Set game mode to "title"
+		jmp	TitleScreen					; Go to the title screen
 
 ; =========================================================================================================================================================
 ; ---------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -230,6 +230,7 @@ WWZ_Blocks:
 WWZ_Pal:
 		dc.w	$100>>1-1
 		incbin	"Graphics/Palettes/Wacky Workbench/Normal.pal"
+        WWZ_Pal_End:
 		incbin	"Graphics/Palettes/Wacky Workbench/Water.pal"
 		even
 WWZ_Tiles:
