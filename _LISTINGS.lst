@@ -9435,7 +9435,7 @@
 000024B2 6100 E91A                          bsr.w   EniDec
 000024B6                            
 000024B6 43F9 00FF 0000             		lea	miscbuff,a1
-000024BC 203C 4000 0003             		move.l	#$40000003,d0			; At (0, 0) on plane A
+000024BC 203C 451C 0003             		move.l	#$451C0003,d0			; At (0, 0) on plane A
 000024C2 720B                       		moveq	#$B,d1
 000024C4 7403                       		moveq	#$3,d2
 000024C6 7600                       		moveq	#0,d3				; Base tile properties: Tile ID 0, no flags
